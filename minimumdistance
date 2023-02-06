@@ -1,0 +1,31 @@
+import sys
+import math
+def dist(a1, a2):
+    return math.sqrt((a1[0] - a2[0]) ** 2 + (a1[1] - a2[1]) ** 2)
+def minimunDistance(array):
+    if len(array) <= 2:
+        if len(array) == 1:
+            return sys.maxsize
+        else:
+            dist(array[0], array[1])
+    array.sort(key = lambda x: x[0])
+    mid = len(array)//2
+    midPoint = array[mid]
+    dl = minimunDistance(array[0:mid])
+    dr = minimunDistance(array[mid:])
+    d = min(dl, dr)
+    strip = []
+    for i in range(len(array)):
+        if abs(array[i][0] - midPoint[0]) < d:
+            strip.append(array[i])
+    min_dist = d
+    strip = sorted(strip, key=lambda point: point[1])
+    for i in range(len(strip)):
+        for j in range(i+1, len(strip)):
+            if (strip[j][1] - strip[i][1]) >= min_dist:
+                break
+            if dist(strip[i], strip[j]) < min_dist:
+                min_dist = dist(strip[i], strip[j])
+    return min(d, min_dist, len(strip), d)
+if __name__ == '__main__':
+    print(minimunDistance([(0, 0), (2, 2.5), (3, 1.5)]))
